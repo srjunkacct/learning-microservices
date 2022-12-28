@@ -1,9 +1,12 @@
 package com.technodrome.multiplication.challenge;
 
 import com.technodrome.multiplication.user.User;
+import com.technodrome.multiplication.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,5 +35,10 @@ public class ChallengeServiceImpl implements ChallengeService {
 
         ChallengeAttempt storedAttempt = attemptRepository.save(checkedAttempt);
         return checkedAttempt;
+    }
+
+    @Override
+    public List<ChallengeAttempt> getStatsForUser(String userAlias) {
+        return attemptRepository.findTop10ByUserAliasOrderByIdDesc(userAlias);
     }
 }

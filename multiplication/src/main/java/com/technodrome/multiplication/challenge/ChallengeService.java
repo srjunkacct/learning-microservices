@@ -1,5 +1,7 @@
 package com.technodrome.multiplication.challenge;
 
+import java.util.List;
+
 public interface ChallengeService {
 
     /**
@@ -9,4 +11,5 @@ public interface ChallengeService {
      */
 
     ChallengeAttempt verifyAttempt(ChallengeAttemptDTO resultAttempt);
+    List<ChallengeAttempt> getStatsForUser(String userAlias);
 }

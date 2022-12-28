@@ -14,9 +14,12 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @ExtendWith(SpringExtension.class)
@@ -35,6 +38,10 @@ public class ChallengeAttemptControllerTest {
 
     @Autowired
     private JacksonTester<ChallengeAttempt> jsonResultAttempt;
+
+    @Autowired
+    private JacksonTester<List<ChallengeAttempt>> jsonResultAttemptList;
+
 
     @Test
     void postValidResult() throws Exception
@@ -72,6 +79,28 @@ public class ChallengeAttemptControllerTest {
                                 .content(jsonRequestAttempt.write(attemptDTO).getJson()))
                 .andReturn().getResponse();
         then(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+
+    }
+
+    @Test
+    void getAttempts() throws Exception
+    {
+        User user = new User( 1L, "JohnDoe");
+        ChallengeAttempt attempt1 = new ChallengeAttempt(1L, user, 50, 60, 3000, true);
+        ChallengeAttempt attempt2 = new ChallengeAttempt(2L, user, 50, 60, 3051, false);
+        List<ChallengeAttempt> lastAttempts = List.of(attempt1, attempt2);
+        given(challengeService
+                .getStatsForUser("JohnDoe"))
+                .willReturn(lastAttempts);
+
+        MockHttpServletResponse response = mvc.perform(
+                        get("/attempts").param("alias", "JohnDoe")).andReturn().getResponse();
+        then(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        then(response.getContentAsString()).isEqualTo(
+                jsonResultAttemptList.write(
+                        lastAttempts
+                ).getJson());
+
 
     }
 }

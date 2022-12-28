@@ -1,6 +1,5 @@
-package com.technodrome.multiplication.challenge;
+package com.technodrome.multiplication.user;
 
-import com.technodrome.multiplication.user.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
