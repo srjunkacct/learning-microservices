@@ -1,5 +1,6 @@
 import * as React from "react";
 import ApiClient from "../services/ApiClient";
+import LastAttemptsComponent from "./LastAttemptsComponent";
 
 class ChallengeComponent extends React.Component {
 
@@ -53,6 +54,8 @@ class ChallengeComponent extends React.Component {
                             this.updateMessage("Oops! Your guess " + json.resultAttempt +
                             " is wrong, but keep playing!");
                         }
+                        this.updateLastAttempts(this.state.user);
+                        this.refreshChallenge();
                     });
                 } else {
                    this.updateMessage("Error: server error or not available");
@@ -64,6 +67,22 @@ class ChallengeComponent extends React.Component {
         this.setState({
           message: m
         });
+    }
+
+    updateLastAttempts(userAlias: string) {
+        ApiClient.getAttempts(userAlias).then(res => {
+            if (res.ok) {
+                let attempts: Attempt[] = [];
+                res.json().then( data => {
+                    data.forEach(item => {
+                        attempts.push(item);
+                    });
+                    this.setState({
+                        lastAttempts: attempts
+                    });
+                })
+            }
+        })
     }
 
     render() {
