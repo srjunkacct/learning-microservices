@@ -34,7 +34,7 @@ public class ChallengeServiceImpl implements ChallengeService {
                 isCorrect);
 
         ChallengeAttempt storedAttempt = attemptRepository.save(checkedAttempt);
-        return checkedAttempt;
+        return storedAttempt;
     }
 
     @Override

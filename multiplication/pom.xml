@@ -14,7 +14,7 @@
 	<name>multiplication</name>
 	<description>Multiplication App</description>
 	<properties>
-		<java.version>18</java.version>
+		<java.version>14</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
